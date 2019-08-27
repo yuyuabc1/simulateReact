@@ -1,0 +1,23 @@
+{
+  "name": "simulateReact",
+  "version": "1.0.0",
+  "description": "模仿React实现自己的框架",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuyuabc1/simulateReact.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yuyuabc1/simulateReact/issues"
+  },
+  "homepage": "https://github.com/yuyuabc1/simulateReact#readme",
+  "dependencies": {
+    "react": "^16.8.6"
+  }
+}
