@@ -2040,7 +2040,7 @@ function requestCurrentTime() {
   ) {
     // If there's no pending work, or if the pending work is offscreen, we can
     // read the current time without risk of tearing.
-    // 如果没有挂起的工作，或者挂起的工作在屏幕外，我们可以读取当前时间，而不会有撕裂的风险。
+    // 如果没有挂起的工作，或者挂起的工作在屏幕外，我们可以读取当前时间，而不会有出错的风险。
     recomputeCurrentRendererTime();
     currentSchedulerTime = currentRendererTime;
     return currentSchedulerTime;
@@ -2050,6 +2050,10 @@ function requestCurrentTime() {
   // within the same event to receive different expiration times, leading to
   // tearing. Return the last read time. During the next idle callback, the
   // time will be updated.
+  /**
+   * 已经有待处理的工作了。我们可能处在浏览器事件之间，如果我们读取当前时间，它可能会造成同一个时间中接收多个不同的更新时间，
+   * 从而导致报错。返回上次的读取时间，在下次空闲的回调返回之前，时间将被更新。
+   */
   return currentSchedulerTime;
 }
 
