@@ -9,7 +9,6 @@
 
 import type {Fiber} from './ReactFiber';
 import type {ExpirationTime} from './ReactFiberExpirationTime';
-
 import React from 'react';
 import {Update, Snapshot} from 'shared/ReactSideEffectTags';
 import {
@@ -188,10 +187,13 @@ export function applyDerivedStateFromProps(
 const classComponentUpdater = {
   isMounted,
   enqueueSetState(inst, payload, callback) {
+    // 获取fiber对象
     const fiber = ReactInstanceMap.get(inst);
+    // 获取任务当前时间，用来计算过期时间 
     const currentTime = requestCurrentTime();
+    // 获取过期时间
     const expirationTime = computeExpirationForFiber(currentTime, fiber);
-
+    // 创建更新
     const update = createUpdate(expirationTime);
     update.payload = payload;
     if (callback !== undefined && callback !== null) {

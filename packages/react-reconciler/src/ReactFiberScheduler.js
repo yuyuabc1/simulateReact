@@ -6,7 +6,9 @@
  *
  * @flow
  */
-
+/**
+ * 该文件注释不多，但是代码量很多，且包含很多的公共变量
+ */
 import type {Fiber} from './ReactFiber';
 import type {Batch, FiberRoot} from './ReactFiberRoot';
 import type {ExpirationTime} from './ReactFiberExpirationTime';
@@ -63,7 +65,7 @@ import {
   replayFailedUnitOfWorkWithInvokeGuardedCallback,
   warnAboutDeprecatedLifecycles,
 } from 'shared/ReactFeatureFlags';
-import getComponentName from 'shared/getComponentName';
+import getComponentName from 'shared/getComponentNanime';
 import invariant from 'shared/invariant';
 import warningWithoutStack from 'shared/warningWithoutStack';
 
@@ -245,6 +247,9 @@ if (__DEV__) {
 // Used to ensure computeUniqueAsyncExpiration is monotonically decreasing.
 let lastUniqueAsyncExpiration: number = Sync - 1;
 
+/* 表示传入更新应使用的过期时间。
+ *（如果它的值是noWork，请使用默认策略：异步模式下使用异步更新，同步模式下使用同步更新。）
+ */
 // Represents the expiration time that incoming updates should use. (If this
 // is NoWork, use the default strategy: async updates in async mode, sync
 // updates in sync mode.)
@@ -1575,7 +1580,9 @@ function computeUniqueAsyncExpiration(): ExpirationTime {
 
 function computeExpirationForFiber(currentTime: ExpirationTime, fiber: Fiber) {
   let expirationTime;
-  if (expirationContext !== NoWork) {
+  // 判断过期时间上下文其实就是一个过期时间格式的数据， 其默认值为noWork
+  if (expirationContext !== NoWork) { 
+    // 当fiber具有一个明确的过期上下文时，我们将过期时间上下文赋给过期时间 
     // An explicit expiration context was set;
     expirationTime = expirationContext;
   } else if (isWorking) {
@@ -1839,6 +1846,7 @@ function scheduleWork(fiber: Fiber, expirationTime: ExpirationTime) {
 }
 
 function deferredUpdates<A>(fn: () => A): A {
+  // 计算优先级最低的expirt  aion方法
   const currentTime = requestCurrentTime();
   const previousExpirationContext = expirationContext;
   const previousIsBatchingInteractiveUpdates = isBatchingInteractiveUpdates;
@@ -1852,6 +1860,7 @@ function deferredUpdates<A>(fn: () => A): A {
   }
 }
 
+// 同步更新方法 
 function syncUpdates<A, B, C0, D, R>(
   fn: (A, B, C0, D) => R,
   a: A,

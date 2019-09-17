@@ -285,7 +285,7 @@ export function updateContainer(
   const current = container.current;
   // 过期时间
   const currentTime = requestCurrentTime();
-  // 使用computeExpirationForFiber来计算过期时间
+  // 使用computeExpirationForFiber来为fiber计算过期时间
   const expirationTime = computeExpirationForFiber(currentTime, current);
   return updateContainerAtExpirationTime(
     element,
