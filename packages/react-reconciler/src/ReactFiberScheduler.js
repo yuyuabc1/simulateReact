@@ -1706,7 +1706,9 @@ function retrySuspendedRoot(
   }
 }
 
+// 根据我传入的fiber节点向上寻找对应的RootFiber对象
 function scheduleWorkToRoot(fiber: Fiber, expirationTime): FiberRoot | null {
+  // 记录更新流程中的时间的方法（具体实现未看）
   recordScheduleUpdate();
 
   if (__DEV__) {
@@ -1717,9 +1719,11 @@ function scheduleWorkToRoot(fiber: Fiber, expirationTime): FiberRoot | null {
   }
 
   // Update the source fiber's expiration time
+  // 更新目标fiber节点身上的过期时间，如果fiber对象身上的expirationTime（过期时间）小于传入的新的过期时间（？），那么将新的过期时间赋给它。
   if (fiber.expirationTime < expirationTime) {
     fiber.expirationTime = expirationTime;
   }
+  // 获取alternate（alternate是什么？）并且更新alternate的expirationTime
   let alternate = fiber.alternate;
   if (alternate !== null && alternate.expirationTime < expirationTime) {
     alternate.expirationTime = expirationTime;
@@ -1735,7 +1739,7 @@ function scheduleWorkToRoot(fiber: Fiber, expirationTime): FiberRoot | null {
       if (node.childExpirationTime < expirationTime) {
         node.childExpirationTime = expirationTime;
         if (
-          alternate !== null &&
+          alternate !== null && 
           alternate.childExpirationTime < expirationTime
         ) {
           alternate.childExpirationTime = expirationTime;
@@ -1792,7 +1796,13 @@ function scheduleWorkToRoot(fiber: Fiber, expirationTime): FiberRoot | null {
   return root;
 }
 
+/**
+ * 
+ * @param {*} fiber fiber对象 
+ * @param {*} expirationTime 创建更新时的计算出的过期时间
+ */
 function scheduleWork(fiber: Fiber, expirationTime: ExpirationTime) {
+  //  找到当前
   const root = scheduleWorkToRoot(fiber, expirationTime);
   if (root === null) {
     if (__DEV__) {
@@ -1805,7 +1815,7 @@ function scheduleWork(fiber: Fiber, expirationTime: ExpirationTime) {
         case MemoComponent:
         case SimpleMemoComponent:
           warnAboutUpdateOnUnmounted(fiber, false);
-          break;
+          break; 
       }
     }
     return;
@@ -1816,7 +1826,7 @@ function scheduleWork(fiber: Fiber, expirationTime: ExpirationTime) {
     nextRenderExpirationTime !== NoWork &&
     expirationTime > nextRenderExpirationTime
   ) {
-    // This is an interruption. (Used for performance tracking.)
+    // This i s an interruption. (Used for performance tracking.)
     interruptedBy = fiber;
     resetStack();
   }
@@ -1824,6 +1834,7 @@ function scheduleWork(fiber: Fiber, expirationTime: ExpirationTime) {
   if (
     // If we're in the render phase, we don't need to schedule this root
     // for an update, because we'll do it before we exit...
+    // 如果 没有正在工作 或者 正在提交（第二阶段，Fiber树渲染完更新到Dom中） 或者 nextRoot 不等于 root
     !isWorking ||
     isCommitting ||
     // ...unless this is a different root than the one we're rendering.

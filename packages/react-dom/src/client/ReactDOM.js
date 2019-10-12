@@ -505,7 +505,14 @@ function legacyCreateRootFromDOMContainer(
   const isConcurrent = false;
   return new ReactRoot(container, isConcurrent, shouldHydrate);
 }
-
+/**
+ * 
+ * @param {*} parentComponent 父组件，parentComponent不存在传入null
+ * @param {*} children container的子元素
+ * @param {*} container 创建ReactRoot的包裹元素
+ * @param {*} forceHydrate 协调更新的选项
+ * @param {*} callback 渲染后的回调方法
+ */
 function legacyRenderSubtreeIntoContainer(
   parentComponent: ?React$Component<any, any>,
   children: ReactNodeList,
@@ -634,12 +641,21 @@ const ReactDOM: Object = {
       callback,
     );
   },
-
+  /**
+   * 
+   * @param {*} element Reactelement react元素
+   * @param {*} container Dom包裹的父节点
+   * @param {*} callback 渲染结束后执行的回调方法
+   */
   render(
     element: React$Element<any>,
     container: DOMContainer,
     callback: ?Function,
   ) {
+    /**
+     * legacyRenderSubtreeIntoContainer方法
+     * 校验参数
+     */
     return legacyRenderSubtreeIntoContainer(
       null,
       element,

@@ -19,6 +19,34 @@ module.exports = {
             template:'../index.html'
         })
     ],
+    module:{
+        rules:[
+            {
+                test:/.css$/,
+                use:[
+                    //注意：这里的顺序很重要，不要乱了顺序
+                    'style-loader',
+                    'css-loader'
+                ]
+            },
+            {
+                test:/.(jpg|png|gif|svg)$/,
+                use:[
+                    'file-loader'
+                ]
+            },
+            {
+                test:/\.js$/,
+                exclude:/(node_modules|bower_components)/,//排除掉node_module目录
+                use:{
+                    loader:'babel-loader',
+                    options:{
+                        presets:['env'] //转码规则
+                    }
+                }
+            }
+        ]
+    },
     mode: 'development',
     devServer:{
       hot:true,
